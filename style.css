@@ -218,11 +218,35 @@ a {
   z-index: 1;
 }
 
+/* Desktop Grid: Left me Content + Stats, Right me Photo Visual */
 .hero-container {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
+  grid-template-areas: 
+    "content visual"
+    "stats visual";
   align-items: center;
-  gap: 50px;
+  gap: 30px 50px;
+}
+
+.hero-content {
+  grid-area: content;
+}
+
+.hero-visual {
+  grid-area: visual;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-stats-grid {
+  grid-area: stats;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 25px;
 }
 
 .status-badge {
@@ -295,7 +319,6 @@ a {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 45px;
 }
 
 .btn {
@@ -332,14 +355,6 @@ a {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.hero-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 25px;
-}
-
 .stat-card {
   display: flex;
   flex-direction: column;
@@ -361,12 +376,6 @@ a {
 }
 
 /* ================= PROFILE CARD (HERO VISUAL) ================= */
-.hero-visual {
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
 .profile-card-wrapper {
   position: relative;
   width: min(380px, 100%);
@@ -1216,7 +1225,7 @@ a {
 }
 
 /* ========================================================
-   RESPONSIVE DESIGN & MOBILE FIX (PHOTO TOP + NO OVERFLOW)
+   RESPONSIVE DESIGN (PC: Same | Mobile: Photo -> Stats -> Content)
    ======================================================== */
 
 @media (max-width: 1024px) {
@@ -1233,29 +1242,56 @@ a {
   }
 }
 
-/* Mobile & Tablet Mode */
+/* Mobile & Tablet Specific Layout */
 @media (max-width: 900px) {
   
-  /* 1. HERO SECTION ME PHOTO TOP PE (order: 1) AUR TEXT NEECHE (order: 2) */
+  /* Flexbox Column Stack for Mobile */
   .hero-container {
     display: flex !important;
     flex-direction: column !important;
-    gap: 40px;
+    gap: 25px;
     text-align: center;
   }
 
+  /* 1. PHOTO SECTION SABSE UPAR */
   .hero-visual {
-    order: 1 !important; /* Photo Sabse Upar */
+    order: 1 !important;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
+  /* 2. STATS SECTION (13+, 10Cr+, North India) PHOTO KE JUST NICHE HORIZONTAL LINE ME */
+  .hero-stats-grid {
+    order: 2 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important; /* Horizontal 3 columns */
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 0;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .hero-stats-grid .stat-num {
+    font-size: 22px;
+  }
+
+  .hero-stats-grid .stat-label {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+
+  /* 3. CONTENT SECTION (Title, Bio, Buttons) STATS KE NICHE */
   .hero-content {
-    order: 2 !important; /* Saara Bio & Experience Detail Photo ke Baad */
+    order: 3 !important;
     width: 100%;
+    margin-top: 5px;
   }
 
-  /* 2. Photo card sizing for mobile screens */
+  /* Photo card sizing on mobile */
   .profile-card-wrapper {
     width: min(340px, 92%);
     margin: 0 auto;
@@ -1265,7 +1301,6 @@ a {
     height: 300px;
   }
 
-  /* 3. Floating tags adjustment taaki screen se bahar na nikle */
   .badge-top {
     left: -10px;
     top: 20px;
@@ -1278,11 +1313,6 @@ a {
     padding: 8px 12px;
   }
 
-  .floating-badge strong {
-    font-size: 11px;
-  }
-
-  /* 4. Center align elements for clean mobile look */
   .status-badge {
     margin-left: auto;
     margin-right: auto;
@@ -1298,11 +1328,6 @@ a {
     justify-content: center;
     flex-wrap: wrap;
     gap: 12px;
-  }
-
-  .hero-stats-grid {
-    max-width: 480px;
-    margin: 0 auto;
   }
 
   .contact-btn-wrap {
@@ -1354,13 +1379,14 @@ a {
   }
 }
 
-@media (max-width: 560px) {
+/* Small mobile devices (Screens <= 480px) */
+@media (max-width: 480px) {
   .hero-section {
-    padding-top: 120px;
+    padding-top: 115px;
   }
 
   .hero-title {
-    font-size: 34px;
+    font-size: 32px;
     line-height: 1.15;
   }
 
@@ -1372,13 +1398,22 @@ a {
     height: 260px;
   }
 
-  .expertise-grid {
-    grid-template-columns: 1fr;
+  /* Stats horizontal 3 columns tight screens par bhi perfect rahenge */
+  .hero-stats-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px;
   }
 
-  .hero-stats-grid {
+  .hero-stats-grid .stat-num {
+    font-size: 19px;
+  }
+
+  .hero-stats-grid .stat-label {
+    font-size: 9px;
+  }
+
+  .expertise-grid {
     grid-template-columns: 1fr;
-    gap: 14px;
   }
 
   .timeline-item {
